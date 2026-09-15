@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Abstract Submission Form</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #e8f5e9 0%, #e0f2f1 100%);
+      min-height: 100vh;
+      padding: 30px 16px;
+      color: #263238;
+    }
+
+    .container {
+      max-width: 860px;
+      margin: 0 auto;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.10);
+      overflow: hidden;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #2e7d32, #00897b);
+      color: #fff;
+      padding: 36px 40px 28px;
+      text-align: center;
+    }
+    .header h1 { font-size: 1.9rem; letter-spacing: 0.5px; margin-bottom: 8px; }
+    .header p  { font-size: 0.97rem; opacity: 0.88; }
+
+    .form-body { padding: 36px 40px; }
+
+    .section-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #2e7d32;
+      border-left: 4px solid #2e7d32;
+      padding-left: 12px;
+      margin: 32px 0 18px;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+    }
+    .section-title:first-of-type { margin-top: 0; }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px 24px;
+    }
+    .full-width { grid-column: 1 / -1; }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    label {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: #455a64;
+    }
+    label .req { color: #c62828; margin-left: 2px; }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    input[type="date"],
+    select,
+    textarea {
+      border: 1.5px solid #cfd8dc;
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 0.95rem;
+      color: #263238;
+      background: #f9fbe7;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      width: 100%;
+      font-family: inherit;
+    }
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: #2e7d32;
+      box-shadow: 0 0 0 3px rgba(46,125,50,0.12);
+      background: #fff;
+    }
+    input.error, select.error, textarea.error {
+      border-color: #c62828;
+      background: #fff8f8;
+    }
+
+    textarea { resize: vertical; min-height: 160px; }
+
+    .word-count-wrap { text-align: right; font-size: 0.82rem; color: #78909c; margin-top: 4px; }
+    .word-count-wrap span { font-weight: 700; }
+    .word-count-wrap.ok   span { color: #2e7d32; }
+    .word-count-wrap.over span { color: #c62828; }
+    .word-count-wrap.under span { color: #f57c00; }
+
+    .author-block {
+      border: 1.5px solid #e0f2f1;
+      border-radius: 10px;
+      padding: 18px 20px;
+      margin-bottom: 12px;
+      background: #f1f8f4;
+    }
+    .author-block .author-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+    .author-block .author-label {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #00695c;
+    }
+    .btn-remove-author {
+      background: none;
+      border: 1px solid #ef9a9a;
+      color: #c62828;
+      border-radius: 6px;
+      padding: 3px 10px;
+      font-size: 0.82rem;
+      cursor: pointer;
+      transition: background 0.18s;
+    }
+    .btn-remove-author:hover { background: #ffebee; }
+
+    .author-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 12px 16px;
+    }
+
+    #add-author-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #e8f5e9;
+      border: 1.5px dashed #66bb6a;
+      color: #2e7d32;
+      border-radius: 8px;
+      padding: 9px 20px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 6px;
+      transition: background 0.18s;
+    }
+    #add-author-btn:hover { background: #c8e6c9; }
+    #add-author-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    .keyword-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .keyword-tag {
+      background: #e0f2f1;
+      color: #004d40;
+      border-radius: 20px;
+      padding: 4px 14px 4px 12px;
+      font-size: 0.84rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .keyword-tag .rm-kw {
+      cursor: pointer;
+      font-size: 1rem;
+      line-height: 1;
+      color: #00695c;
+      border: none;
+      background: none;
+    }
+    .keyword-input-wrap {
+      display: flex;
+      gap: 8px;
+    }
+    .keyword-input-wrap input { flex: 1; }
+    .keyword-input-wrap button {
+      background: #2e7d32;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 0 16px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.18s;
+    }
+    .keyword-input-wrap button:hover { background: #1b5e20; }
+    .kw-hint { font-size: 0.8rem; color: #78909c; margin-top: 4px; }
+
+    .theme-group {
+      margin-bottom: 20px;
+      border: 1.5px solid #e0f2f1;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .theme-header {
+      background: linear-gradient(90deg, #2e7d32, #00897b);
+      color: #fff;
+      padding: 11px 18px;
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+    .theme-body { padding: 12px 18px; }
+    .subtheme-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 8px 0;
+      border-bottom: 1px solid #f1f8f4;
+      font-size: 0.91rem;
+      cursor: pointer;
+    }
+    .subtheme-item:last-child { border-bottom: none; }
+    .subtheme-item input[type="radio"] {
+      width: 17px;
+      height: 17px;
+      margin-top: 2px;
+      accent-color: #2e7d32;
+      flex-shrink: 0;
+      background: unset;
+      border: unset;
+      padding: unset;
+    }
+    .subtheme-item span { color: #37474f; }
+
+    .radio-group {
+      display: flex;
+      gap: 20px;
+      margin-top: 6px;
+    }
+    .radio-option {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      border: 1.5px solid #cfd8dc;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: border-color 0.18s, background 0.18s;
+      font-size: 0.93rem;
+      font-weight: 600;
+    }
+    .radio-option input { accent-color: #2e7d32; width: 17px; height: 17px; background: unset; border: unset; padding: unset; }
+    .radio-option.selected {
+      border-color: #2e7d32;
+      background: #e8f5e9;
+      color: #1b5e20;
+    }
+
+    .submit-wrap { margin-top: 36px; text-align: center; }
+    .submit-btn {
+      background: linear-gradient(135deg, #2e7d32, #00897b);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 14px 56px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      box-shadow: 0 4px 16px rgba(46,125,50,0.22);
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(46,125,50,0.28); }
+    .submit-btn:active { transform: translateY(0); }
+
+    .success-msg {
+      display: none;
+      background: #e8f5e9;
+      border: 1.5px solid #81c784;
+      border-radius: 10px;
+      padding: 24px;
+      text-align: center;
+      color: #1b5e20;
+      font-size: 1.05rem;
+      margin-top: 24px;
+    }
+    .success-msg strong { display: block; font-size: 1.3rem; margin-bottom: 8px; }
+
+    .error-msg { color: #c62828; font-size: 0.8rem; margin-top: 2px; display: none; }
+
+    @media (max-width: 640px) {
+      .form-body { padding: 24px 16px; }
+      .header   { padding: 24px 16px 20px; }
+      .form-grid { grid-template-columns: 1fr; }
+      .author-grid { grid-template-columns: 1fr; }
+      .radio-group { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <h1>&#128196; Abstract Submission Form</h1>
+    <p>Please complete all required fields marked with <strong>*</strong>. All submissions are treated confidentially.</p>
+  </div>
+
+  <form id="submissionForm" class="form-body" novalidate>
+
+    <!-- 1. PERSONAL INFORMATION -->
+    <div class="section-title">1. Personal Information</div>
+    <div class="form-grid">
+
+      <div class="form-group full-width">
+        <label for="fullName">Full Name <span class="req">*</span></label>
+        <input type="text" id="fullName" name="fullName" placeholder="e.g. Jane Doe" />
+        <span class="error-msg" id="err-fullName">Please enter your full name.</span>
+      </div>
+
+      <div class="form-group">
+        <label for="dob">Date of Birth <span class="req">*</span></label>
+        <input type="date" id="dob" name="dob" />
+        <span class="error-msg" id="err-dob">Please enter your date of birth.</span>
+      </div>
+
+      <div class="form-group">
+        <label for="gender">Gender <span class="req">*</span></label>
+        <select id="gender" name="gender">
+          <option value="">&#8212; Select &#8212;</option>
+          <option>Male</option>
+          <option>Female</option>
+          <option>Prefer not to say</option>
+        </select>
+        <span class="error-msg" id="err-gender">Please select your gender.</span>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email Address <span class="req">*</span></label>
+        <input type="email" id="email" name="email" placeholder="you@example.com" />
+        <span class="error-msg" id="err-email">Please enter a valid email address.</span>
+      </div>
+
+      <div class="form-group">
+        <label for="phone">Contact (Phone) <span class="req">*</span></label>
+        <input type="tel" id="phone" name="phone" placeholder="+1 234 567 8900" />
+        <span class="error-msg" id="err-phone">Please enter your phone number.</span>
+      </div>
+
+      <div class="form-group">
+        <label for="country">Country <span class="req">*</span></label>
+        <input type="text" id="country" name="country" placeholder="e.g. Indonesia" />
+        <span class="error-msg" id="err-country">Please enter your country.</span>
+      </div>
+
+      <div class="form-group full-width">
+        <label for="address">Address</label>
+        <input type="text" id="address" name="address" placeholder="Street, City, Postal Code" />
+      </div>
+
+    </div>
+
+    <!-- 2. ABSTRACT INFORMATION -->
+    <div class="section-title">2. Abstract Information</div>
+    <div class="form-grid">
+      <div class="form-group full-width">
+        <label for="title">Abstract Title <span class="req">*</span></label>
+        <input type="text" id="title" name="title" placeholder="Enter the title of your abstract" />
+        <span class="error-msg" id="err-title">Please enter the abstract title.</span>
+      </div>
+    </div>
+
+    <!-- 3. AUTHORS -->
+    <div class="section-title">3. Author(s) <span style="font-weight:400;font-size:.85rem;color:#78909c">(up to 6)</span></div>
+    <div id="authors-container"></div>
+    <button type="button" id="add-author-btn">&#xff0b; Add Author</button>
+
+    <div class="form-grid" style="margin-top:20px;">
+      <div class="form-group full-width">
+        <label for="corrEmail">Corresponding Author Email <span class="req">*</span></label>
+        <input type="email" id="corrEmail" name="corrEmail" placeholder="corresponding@author.com" />
+        <span class="error-msg" id="err-corrEmail">Please enter the corresponding author's email.</span>
+      </div>
+    </div>
+
+    <!-- 4. ABSTRACT TEXT -->
+    <div class="section-title">4. Abstract Text</div>
+    <div class="form-group">
+      <label for="abstractText">Insert Abstract <span class="req">*</span> <span style="font-weight:400;color:#78909c;font-size:.82rem">(250 &#8211; 500 words)</span></label>
+      <textarea id="abstractText" name="abstractText" placeholder="Write your abstract here (250&#8211;500 words)..."></textarea>
+      <div class="word-count-wrap under" id="wordCountWrap">Word count: <span id="wordCount">0</span> / 500</div>
+      <span class="error-msg" id="err-abstractText">Abstract must be between 250 and 500 words.</span>
+    </div>
+
+    <!-- 5. KEYWORDS -->
+    <div class="section-title">5. Keywords <span style="font-weight:400;font-size:.85rem;color:#78909c">(up to 6)</span></div>
+    <div class="keyword-input-wrap">
+      <input type="text" id="kwInput" placeholder="Type a keyword and click Add&#8230;" />
+      <button type="button" id="addKwBtn">Add</button>
+    </div>
+    <div class="kw-hint">Tip: paste multiple keywords separated by semicolons &#8212; e.g. <em>keyword1; keyword2</em></div>
+    <div class="keyword-tags" id="keywordTags"></div>
+    <input type="hidden" id="keywordsHidden" name="keywords" />
+    <span class="error-msg" id="err-keywords">Please add at least one keyword.</span>
+
+    <!-- 6. CONFERENCE THEME -->
+    <div class="section-title">6. Select Conference Theme &amp; Sub-theme <span class="req">*</span></div>
+    <span class="error-msg" id="err-theme">Please select a sub-theme.</span>
+
+    <!-- Food Security -->
+    <div class="theme-group">
+      <div class="theme-header">&#127806; Food Security</div>
+      <div class="theme-body">
+        <label class="subtheme-item">
+          <input type="radio" name="subtheme" value="Bioeconomy, agroforestry, food security, and regional economic growth" />
+          <span>Bioeconomy, agroforestry, food security, and regional economic growth</span>
+        </label>
+        <label class="subtheme-item">
+          <input type="radio" name="subtheme" value="Climate-smart terrestrial and aquatic food systems" />
+          <span>Climate-smart terrestrial and aquatic food systems</span>
+        </label>
+        <label class="subtheme-item">
+          <input type="radio" name="subtheme" value="Justice and equity in food security initiatives" />
+          <span>Justice and equity in food security initiatives</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Energy Security -->
+    <div class="theme-group">
+      <div class="theme-header">&#9889; Energy Security and Sustainability</div>
+      <div class="theme-body">
+        <label class="subtheme-item">
+          <input type="radio" name="subtheme" value="Green industrial policy" />
+          <span>Green industrial policy</span>
+        </label>
+        <label class="subtheme-item">
+          <input type="radio" name="subtheme" value="Heavy industry decarbonization, including industrial heat" />
+          <span>Heavy industry decarbonization, including industrial heat</span>
+        </label>
+        <label class="subtheme-item">
+          <input type="radio" name="subtheme" value="Power grid flexibility and storage" />
+          <span>Power grid flexibility and storage</span>
+        </label>
+        <label class="subtheme-item">
+          <input type="radio" name="subtheme" value="Low emission transport and building" />
+          <span>Low emission transport and building</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Water Security -->
+    <div class="theme-group">
+      <div class="theme-header">&#128167; Water Security and Resilience Nexus</div>
+      <div class="theme-body">
+        <label class="subtheme-item">
+          <input type="radio" name="subtheme" value="Urban water resilience and climate adaptation" />
+          <span>Urban water resilience and climate adaptation</span>
+        </label>
+        <label class="subtheme-item">
+          <input type="radio" name="subtheme" value="Water governance: justice, inclusion, digital innovation" />
+          <span>Water governance: justice, inclusion, digital innovation</span>
+        </label>
+        <label class="subtheme-item">
+          <input type="radio" name="subtheme" value="Water&#8211;food and water-energy nexus for resilient, low carbon systems" />
+          <span>Water&#8211;food and water-energy nexus for resilient, low carbon systems</span>
+        </label>
+        <label class="subtheme-item">
+          <input type="radio" name="subtheme" value="Circular water economy and wastewater reuse" />
+          <span>Circular water economy and wastewater reuse</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Climate Resilience -->
+    <div class="theme-group">
+      <div class="theme-header">&#127757; Climate Resilience (Cross-cutting)</div>
+      <div class="theme-body">
+        <label class="subtheme-item">
+          <input type="radio" name="subtheme" value="Indigenous and local knowledge on food, energy, and water security" />
+          <span>Indigenous and local knowledge on food, energy, and water security</span>
+        </label>
+        <label class="subtheme-item">
+          <input type="radio" name="subtheme" value="Nature-based solutions for climate mitigation and adaptation" />
+          <span>Nature-based solutions for climate mitigation and adaptation</span>
+        </label>
+        <label class="subtheme-item">
+          <input type="radio" name="subtheme" value="Climate financing for mitigation and adaptation" />
+          <span>Climate financing for mitigation and adaptation</span>
+        </label>
+        <label class="subtheme-item">
+          <input type="radio" name="subtheme" value="Environmental health: Air quality and sustainable waste management" />
+          <span>Environmental health: Air quality and sustainable waste management</span>
+        </label>
+        <label class="subtheme-item">
+          <input type="radio" name="subtheme" value="Coastal resilience" />
+          <span>Coastal resilience</span>
+        </label>
+        <label class="subtheme-item">
+          <input type="radio" name="subtheme" value="Climate resilient and affordable housing" />
+          <span>Climate resilient and affordable housing</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- 7. PRESENTATION TYPE -->
+    <div class="section-title">7. Presentation Type <span class="req">*</span></div>
+    <div class="radio-group" id="presentationGroup">
+      <label class="radio-option" id="opt-oral">
+        <input type="radio" name="presentation" value="Oral" /> &#127908; Oral Presentation
+      </label>
+      <label class="radio-option" id="opt-poster">
+        <input type="radio" name="presentation" value="Poster" /> &#128444;&#65039; Poster Presentation
+      </label>
+    </div>
+    <span class="error-msg" id="err-presentation">Please select a presentation type.</span>
+
+    <!-- SUBMIT -->
+    <div class="submit-wrap">
+      <button type="submit" class="submit-btn">Submit Abstract</button>
+    </div>
+
+    <div class="success-msg" id="successMsg">
+      <strong>&#127881; Submission Received!</strong>
+      Thank you for submitting your abstract. You will receive a confirmation email shortly.
+    </div>
+
+  </form>
+</div>
+
+<script>
+  /* ── Author Block Builder ── */
+  const authorsContainer = document.getElementById('authors-container');
+  const addAuthorBtn     = document.getElementById('add-author-btn');
+  let authorCount = 0;
+  const MAX_AUTHORS = 6;
+
+  function addAuthor() {
+    if (authorCount >= MAX_AUTHORS) return;
+    authorCount++;
+    const idx = authorCount;
+
+    const block = document.createElement('div');
+    block.className = 'author-block';
+    block.id = 'author-block-' + idx;
+
+    const removeBtn = idx > 1
+      ? '<button type="button" class="btn-remove-author">\u2715 Remove</button>'
+      : '';
+
+    block.innerHTML =
+      '<div class="author-header">' +
+        '<span class="author-label">Author ' + idx + '</span>' +
+        removeBtn +
+      '</div>' +
+      '<div class="author-grid">' +
+        '<div class="form-group" style="grid-column:1/-1">' +
+          '<label>Name' + (idx === 1 ? ' <span class="req">*</span>' : '') + '</label>' +
+          '<input type="text" name="author_name_' + idx + '" placeholder="Author ' + idx + ' full name" />' +
+        '</div>' +
+        '<div class="form-group">' +
+          '<label>Affiliation</label>' +
+          '<input type="text" name="author_affiliation_' + idx + '" placeholder="Institution / Organization" />' +
+        '</div>' +
+        '<div class="form-group">' +
+          '<label>City</label>' +
+          '<input type="text" name="author_city_' + idx + '" placeholder="City" />' +
+        '</div>' +
+        '<div class="form-group">' +
+          '<label>Country</label>' +
+          '<input type="text" name="author_country_' + idx + '" placeholder="Country" />' +
+        '</div>' +
+      '</div>';
+
+    authorsContainer.appendChild(block);
+
+    const rmBtn = block.querySelector('.btn-remove-author');
+    if (rmBtn) {
+      rmBtn.addEventListener('click', function() {
+        block.remove();
+        authorCount--;
+        renumberAuthors();
+        updateAddBtn();
+      });
+    }
+    updateAddBtn();
+  }
+
+  function renumberAuthors() {
+    const blocks = authorsContainer.querySelectorAll('.author-block');
+    blocks.forEach(function(b, i) {
+      const n = i + 1;
+      b.querySelector('.author-label').textContent = 'Author ' + n;
+    });
+  }
+
+  function updateAddBtn() {
+    addAuthorBtn.disabled = authorCount >= MAX_AUTHORS;
+    addAuthorBtn.textContent = authorCount >= MAX_AUTHORS
+      ? '\u2713 Maximum authors reached'
+      : '\uff0b Add Author';
+  }
+
+  addAuthorBtn.addEventListener('click', addAuthor);
+  addAuthor(); // start with 1
+
+  /* ── Word Counter ── */
+  const abstractEl    = document.getElementById('abstractText');
+  const wordCountEl   = document.getElementById('wordCount');
+  const wordCountWrap = document.getElementById('wordCountWrap');
+
+  function countWords(text) {
+    return text.trim() === '' ? 0 : text.trim().split(/\s+/).length;
+  }
+
+  abstractEl.addEventListener('input', function() {
+    const count = countWords(abstractEl.value);
+    wordCountEl.textContent = count;
+    wordCountWrap.className = 'word-count-wrap';
+    if (count >= 250 && count <= 500)      wordCountWrap.classList.add('ok');
+    else if (count > 500)                  wordCountWrap.classList.add('over');
+    else                                   wordCountWrap.classList.add('under');
+  });
+
+  /* ── Keywords ── */
+  const kwInput     = document.getElementById('kwInput');
+  const keywordTags = document.getElementById('keywordTags');
+  const kwHidden    = document.getElementById('keywordsHidden');
+  const addKwBtn    = document.getElementById('addKwBtn');
+  var keywords = [];
+
+  function renderKeywords() {
+    keywordTags.innerHTML = '';
+    keywords.forEach(function(kw, i) {
+      var tag = document.createElement('span');
+      tag.className = 'keyword-tag';
+      tag.innerHTML = kw + ' <button class="rm-kw" type="button" title="Remove">\u00d7</button>';
+      tag.querySelector('.rm-kw').addEventListener('click', function() {
+        keywords.splice(i, 1);
+        renderKeywords();
+      });
+      keywordTags.appendChild(tag);
+    });
+    kwHidden.value = keywords.join('; ');
+    addKwBtn.disabled = keywords.length >= 6;
+  }
+
+  function addKeyword(raw) {
+    var parts = raw.split(';').map(function(s){ return s.trim(); }).filter(Boolean);
+    parts.forEach(function(kw) {
+      if (keywords.length < 6 && kw && keywords.indexOf(kw) === -1) keywords.push(kw);
+    });
+    renderKeywords();
+  }
+
+  addKwBtn.addEventListener('click', function() {
+    addKeyword(kwInput.value);
+    kwInput.value = '';
+    kwInput.focus();
+  });
+  kwInput.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' || e.key === ';') { e.preventDefault(); addKwBtn.click(); }
+  });
+
+  /* ── Presentation option highlight ── */
+  document.querySelectorAll('input[name="presentation"]').forEach(function(radio) {
+    radio.addEventListener('change', function() {
+      document.querySelectorAll('.radio-option').forEach(function(opt) {
+        opt.classList.remove('selected');
+      });
+      radio.closest('.radio-option').classList.add('selected');
+    });
+  });
+
+  /* ── Validation & Submit ── */
+  var form = document.getElementById('submissionForm');
+
+  function showError(id, show) {
+    var el = document.getElementById('err-' + id);
+    if (!el) return;
+    el.style.display = show ? 'block' : 'none';
+  }
+  function markField(el, invalid) {
+    if (!el) return;
+    if (invalid) el.classList.add('error');
+    else el.classList.remove('error');
+  }
+
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    var valid = true;
+
+    // Personal fields
+    ['fullName','dob','gender','email','phone','country'].forEach(function(f) {
+      var el = document.getElementById(f);
+      var bad = !el.value.trim() || (f === 'email' && !/\S+@\S+\.\S+/.test(el.value));
+      markField(el, bad);
+      showError(f, bad);
+      if (bad) valid = false;
+    });
+
+    // Title
+    var titleEl = document.getElementById('title');
+    var badTitle = !titleEl.value.trim();
+    markField(titleEl, badTitle);
+    showError('title', badTitle);
+    if (badTitle) valid = false;
+
+    // Corresponding email
+    var corrEl = document.getElementById('corrEmail');
+    var badCorr = !corrEl.value.trim() || !/\S+@\S+\.\S+/.test(corrEl.value);
+    markField(corrEl, badCorr);
+    showError('corrEmail', badCorr);
+    if (badCorr) valid = false;
+
+    // Abstract word count
+    var wc = countWords(abstractEl.value);
+    var badAbstract = wc < 250 || wc > 500;
+    markField(abstractEl, badAbstract);
+    showError('abstractText', badAbstract);
+    if (badAbstract) valid = false;
+
+    // Keywords
+    var badKw = keywords.length === 0;
+    showError('keywords', badKw);
+    if (badKw) valid = false;
+
+    // Theme
+    var themeSelected = document.querySelector('input[name="subtheme"]:checked');
+    showError('theme', !themeSelected);
+    if (!themeSelected) valid = false;
+
+    // Presentation
+    var presSelected = document.querySelector('input[name="presentation"]:checked');
+    showError('presentation', !presSelected);
+    if (!presSelected) valid = false;
+
+    // Author 1 name
+    var a1 = document.querySelector('input[name="author_name_1"]');
+    if (a1 && !a1.value.trim()) {
+      markField(a1, true);
+      valid = false;
+    }
+
+    if (!valid) {
+      var firstErr = form.querySelector('.error, .error-msg[style*="block"]');
+      if (firstErr) firstErr.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+
+    // ── Send to Formspree ──
+    var submitBtn = form.querySelector('.submit-btn');
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Submitting\u2026';
+
+    var data = {
+      fullName:           document.getElementById('fullName').value,
+      dateOfBirth:        document.getElementById('dob').value,
+      gender:             document.getElementById('gender').value,
+      email:              document.getElementById('email').value,
+      phone:              document.getElementById('phone').value,
+      country:            document.getElementById('country').value,
+      address:            document.getElementById('address').value,
+      abstractTitle:      document.getElementById('title').value,
+      correspondingEmail: document.getElementById('corrEmail').value,
+      abstract:           document.getElementById('abstractText').value,
+      keywords:           document.getElementById('keywordsHidden').value,
+      subtheme:           (document.querySelector('input[name="subtheme"]:checked') || {}).value || '',
+      presentation:       (document.querySelector('input[name="presentation"]:checked') || {}).value || ''
+    };
+
+    var authorBlocks = document.querySelectorAll('.author-block');
+    authorBlocks.forEach(function(b, i) {
+      var n = i + 1;
+      var nm = b.querySelector('input[name="author_name_' + n + '"]');
+      var af = b.querySelector('input[name="author_affiliation_' + n + '"]');
+      var ci = b.querySelector('input[name="author_city_' + n + '"]');
+      var co = b.querySelector('input[name="author_country_' + n + '"]');
+      data['author_' + n + '_name']        = nm ? nm.value : '';
+      data['author_' + n + '_affiliation'] = af ? af.value : '';
+      data['author_' + n + '_city']        = ci ? ci.value : '';
+      data['author_' + n + '_country']     = co ? co.value : '';
+    });
+
+    // ⚠️ Formspree endpoint integrated
+    fetch('https://formspree.io/f/xrpgndae', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify(data)
+    })
+    .then(function(response) {
+      if (response.ok) {
+        form.style.display = 'none';
+        document.getElementById('successMsg').style.display = 'block';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        return response.json().then(function(err) { throw err; });
+      }
+    })
+    .catch(function(err) {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Submit Abstract';
+      alert('Submission failed. Please try again or contact the organizers.');
+      console.error(err);
+    });
+  });
+</script>
+</body>
+</html>
